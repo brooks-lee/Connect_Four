@@ -57,18 +57,7 @@ class Game:
 			elif(self.Check(board,i,self.opponent)):
 				scr.append (-10)#1*(Game.Rows*Game.Columns -self.numMoves)/2)
 				return -10#*(Game.Rows*Game.Columns -self.numMoves)/2
-		'''
-		if turn == self.player:
-			if 10 in scr:
-				return 10
-			elif -10 in scr:
-				return -10
-		else:
-			if -10 in scr:
-				return -10
-			elif 10 in scr:
-				return 10
-		'''
+		
 		return 0
 
 	def CheckState(self,board,c,player):
@@ -112,7 +101,7 @@ class Game:
 			if count >= Game.CountToTake-1:
 				return True
 
-		#print "check diagonal right alignment"
+		
 		count =0
 		for x,y in [(1,-1),(-1,1)]:
 			i = h + x
@@ -132,14 +121,14 @@ class Game:
 		h = Game.Rows-self.GetHeight(board,c)
 		h-=1
 
-		#print "check vertical alignment"
+		
 		#check vertical		
 		if(self.GetHeight(board,c) >= Game.CountToTake-1):
 			(w,x,y) = board[h+1][c],board[h+2][c], board[h+3][c]
 			if (w,x,y).count(player) >= Game.CountToTake-1:
 				return True
 
-		#print "check horizontal alignment"
+		
 		count = 0
 		for y in [-1,1]:
 			i = h
@@ -155,7 +144,7 @@ class Game:
 
 		
 		#diagonal
-		#print "check diagonal left alignment"
+		
 		count =0
 		for x,y in [(-1,-1),(1,1)]:
 			i = h + x
@@ -170,7 +159,7 @@ class Game:
 			if count >= Game.CountToTake-1:
 				return True
 
-		#print "check diagonal right alignment"
+		
 		count =0
 		for x,y in [(1,-1),(-1,1)]:
 			i = h + x
@@ -201,19 +190,14 @@ class Game:
 
 
 	def MiniMax(self, board,depth,turn,alpha,beta,distance):
-		#print Game.lastMove
+		
 		isWin = self.CheckState(board,Game.lastMove,(1+turn%2))
-		#print isWin ," for player ",(1+turn%2), " for col ",Game.lastMove
+		
 		if isWin and (1+turn%2)==self.player:
 			return 10 -(depth-1)
 		if isWin and (1+turn%2) == self.opponent:
 			return -10 + (depth-1)
-		#print "score from getscore for player ",turn," is ",score
-		#if score == 10:
-		#	return score
-		#elif score == -10:
-		#	return score
-		
+				
 
 		if(self.numMoves == Game.Rows * Game.Columns):
 			return 0
@@ -242,19 +226,12 @@ class Game:
 		for i in self.movesOrder:
 			if self.Playable(board,i):
 				ind = Game.Rows - self.GetHeight(board,i) - 1
-				#print "putting data in cell ",ind,i
 				self.numMoves += 1
 				board[ind][i] = turn
-				'''
-				print '********** Player ',turn,' ',(ind,i),'****************'
-				for j in range(0,Game.Rows):
-					print board[j]
-				print '**************************'
-				'''
+				
 				Game.lastMove  = i
 				minimaxMove = self.MiniMax(board,depth+1,(1+turn%2),alpha,beta,distance-1)
 				Game.lastScore = minimaxMove	
-				#print "score returned for col ",i," for player ",turn, " is ",minimaxMove
 				board[ind][i] = 0
 				if(turn == self.player):
 					bestScore = max(bestScore,minimaxMove)
@@ -279,28 +256,19 @@ class Game:
 				break
 			bestScore = -1000
 			bestMove = -1
-			#print self.Playable(board,1)
 			
 			for i in self.movesOrder:
 				if self.Playable(board,i):
-					#print "playing cell ",(Game.Rows - self.GetHeight(board,i) - 1,i)
 					ind = Game.Rows - self.GetHeight(board,i) - 1
 					board[ind][i] = self.player
 					Game.lastMove = i
-					#print '********** Player 1 ',(i),'****************'
-					#for j in range(0,Game.Rows):
-					#	print board[j]
-					#print '**************************'
 					scr = self.MiniMax(board,0,2,-1000,1000,distance)
 					Game.lastScore = scr
-					#print scr ," for player 1 is ",i
 					board[ind][i] = 0
 					self.numMoves = 0
 					if scr > bestScore:
 						bestScore = scr
 						bestMove = i
-		
-		#print "The move and the score is ",bestMove,bestScore
 		return bestMove
 
 class ZobristTable:
