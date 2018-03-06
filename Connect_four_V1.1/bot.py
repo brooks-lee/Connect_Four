@@ -1,12 +1,3 @@
-#---------------------------------------------------------------------#
-# Four In A Row AI Challenge - Starter Bot                            #
-# ============                                                        #
-#                                                                     #
-# Last update: 30 Nov, 2017                                           #
-#                                                                     #
-# @author Vaishali Sharma <vaishali0001sharma@gmail.com>              #              
-# @version 1.2                                                        #
-#---------------------------------------------------------------------#
 import ConnectFour
 from sys import stdin, stdout
 import random
